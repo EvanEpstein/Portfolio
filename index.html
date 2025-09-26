@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Name - Computer Science Portfolio</title>
+    <title>ATCS Evan Epstein - Computer Science Portfolio</title>
     <style>
+        * {
+        font-family: "Playfair Display", serif;
+        font-optical-sizing: auto;
+        font-style: normal;
+        }
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -13,7 +21,7 @@
             color: #333;
         }
         header {
-            background-color: #333;
+            background-color: #53311f;
             color: #fff;
             padding: 1em 0;
             text-align: center;
@@ -45,13 +53,24 @@
             overflow: hidden;
             padding: 20px 0;
         }
+        .projects-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px; 
+        }
         .project-card {
             background-color: #fff;
-            border: 1px solid #ddd;
+            border: 4px solid #ff6303;
             padding: 20px;
-            margin-bottom: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(224,110, 65,0.1);
+            width: calc(50% - 10px);
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+        .atcs-projects .project-card {
+            border-style: dotted;
         }
         .project-card h3 {
             margin-top: 0;
@@ -77,7 +96,9 @@
     <nav>
         <ul>
             <li><a href="#about">About</a></li>
-            <li><a href="#projects">Projects</a></li>
+            <li><a href="#APCS-projects">APCS Projects</a></li>
+            <li><a href="#Honors-projects">Honors Projects</a></li>
+            <li><a href="#ATCS-projects">ATCS Projects</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
@@ -87,35 +108,115 @@
         <section id="about">
             <h2>About Me</h2>
             <p>
-                Hello! I am Evan Epstein, a computer science student with a passion for [Your Interests, e.g., web development, machine learning, data science].
-                This portfolio showcases some of the projects I've worked on.
+                Hello! I am Evan Epstein, a computer science student with a passion for baseball, soccer, and video games. 
+                One of my favorite parts of working in the computer science space is making games, so i't so much cooler playing games I've made!
+                This portfolio showcases some of the projects I've worked on and the games I made.
             </p>
         </section>
 
         ---
 
-        <section id="projects">
-            <h2>My Projects</h2>
+        <section id="APCS-projects">
+            <h2>APCS projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3>Geometry Dash</h3>
+                    <p>
+                        Last year, I decided to have my final project be my own rendition of a game from my childhood, Geometry Dash.
+                        I think it went pretty well, and when I played it after I finished it, the level I made ran well, looked clean, and was fun.
+                    </p>
+                    <p><strong>Technologies:</strong> Eclipse, Mr. Uhl, Mr. Uhl's video guides, indomitable human spirit</p>
+                    <a href="https://github.com/yourusername/project1" target="_blank">Since admins don't like us</a>
+                </div>
 
-            <div class="project-card">
-                <h3>Project Title 1</h3>
-                <p>
-                    A brief description of your project. Mention the purpose, what technologies you used (e.g., Python, JavaScript, HTML/CSS), and what you learned.
-                </p>
-                <p><strong>Technologies:</strong> Python, Flask, SQLite</p>
-                <a href="https://github.com/yourusername/project1" target="_blank">View on GitHub</a>
+                <div class="project-card">
+                    <h3>Minesweeper</h3>
+                    <p>
+                        Very fun. Watch out or else kaboom.
+                    </p>
+                    <p><strong>Technologies:</strong> x</p>
+                    <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
+                </div>
+
+                <div class="project-card">
+                    <h3>Lights Out</h3>
+                    <p>
+                        THIS ONE ACTUALLY WORKS!               Some may say it's EXTREMEly fun (8/10 ball knowledge).
+                    </p>
+                    <p><strong>Technologies:</strong> Eclipse</p>
+                    <a href="http://127.0.0.1:5500/LightsOutFolder/LightsOut.html" target="_blank">Link</a>
+                </div>
+                
+                <div class="project-card">
+                    <h3>Snake</h3>
+                    <p>
+                       Sssssss
+                    </p>
+                    <p><strong>Technologies:</strong> x</p>
+                    <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
+                </div>
             </div>
+        </section>
 
-            <div class="project-card">
-                <h3>Project Title 2</h3>
-                <p>
-                    Description of your second project. Be sure to highlight its key features and your role in its development.
-                </p>
-                <p><strong>Technologies:</strong> JavaScript, React, Node.js</p>
-                <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
+        ---
+        
+        <section id="Honors-projects">
+            <h2>Honors projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3>Space Invaders</h3>
+                    <p>
+                        Watch out or else the aliens are going to invade your space...
+                    </p>
+                    <p><strong>Technologies:</strong> x</p>
+                    <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
+                </div>
+
+                <div class="project-card">
+                    <h3>Pong (NYR VS NJD)</h3>
+                    <p>
+                        I couldn't decide if I was a Rangers fan or Devils fan, so why not make a game with both? I'm very proud of this game, because I feel like it's one of my best and most customized games I've ever made.
+                        Can you find the hidden easeter egg?  (Hint: My dad is a <strong>B</strong>ig <strong>B</strong>ruins fan, shout to him.)
+                    </p>
+                    <p><strong>Technologies:</strong> x</p>
+                    <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
+                </div>
             </div>
+        </section>
 
-            </section>
+        ---
+              
+        <section id="ATCS-projects"
+            <h2>ATCS projects</h2>
+            <div class="project-card">
+                    <h3>Base conversion calculator</h3>
+                    <p>
+                        The numbers we use everyday are actually in base ten, since there are 10 digits before moving up to the next position(tens, hundreds, thousands, etc.). Computers use many different bases, commonly including base 2, binary, base 8, octal, and base 16, hexadecimal. This calculator will help you convert a number from and to any positive base up to base 36. Give it a try!
+                    </p>
+                    <p><strong>Technologies:</strong> x</p>
+                    <a href="http://127.0.0.1:3000/BaseConverterFolder/BaseConverter.html?serverWindowId=399a60d0-04e9-4c12-a177-c8d591bca8f1" target="_blank">View on GitHub</a>
+                </div>
+
+            <div class="projects-grid atcs-projects">
+                <div class="project-card">
+                    <h3>COMING SOON: Immaculate Grid?!</h3>
+                    <p>
+                        Didn't make this yet, probably want to.
+                    </p>
+                    <p><strong>Technologies:</strong> x</p>
+                    <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
+                </div>
+
+                <div class="project-card">
+                    <h3>COMING SOON: Who knows...</h3>
+                    <p>
+                        Not even I know what's coming next...
+                    </p>
+                    <p><strong>Technologies:</strong> x</p>
+                    <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
+                </div>
+            </div>
+        </section>
 
         ---
 
@@ -125,8 +226,8 @@
                 Feel free to reach out to me!
             </p>
             <ul>
-                <li><strong>Email:</strong> eepstein27@pascack.org </li>
-                <li><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/yourprofile" target="_blank">linkedin.com/in/yourprofile</a></li>
+                <li><strong>Email:</strong> eepstein27@pascack.org</li>
+                <li><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/yourprofile" target="_blank">linkedin.com/in/yourprofile OOPS DON'T HAVE ONE</a></li>
                 <li><strong>GitHub:</strong> <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a></li>
             </ul>
         </section>
@@ -134,7 +235,7 @@
     </div>
 
     <footer>
-        <p>&copy; 2025 Your Name. All rights reserved.</p>
+        <p>&copy; 2025 Evan Epstein. All rights reserved.</p>
     </footer>
 
 </body>
