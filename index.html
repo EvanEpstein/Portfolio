@@ -69,7 +69,8 @@
             box-sizing: border-box;
             margin-bottom: 20px;
         }
-        .atcs-projects .project-card {
+        /* Only make "coming soon" ATCS cards dotted; keep real project cards solid */
+        .atcs-projects .project-card.coming-soon {
             border-style: dotted;
         }
         .project-card h3 {
@@ -109,7 +110,7 @@
             <h2>About Me</h2>
             <p>
                 Hello! I am Evan Epstein, a computer science student with a passion for baseball, soccer, and video games. 
-                One of my favorite parts of working in the computer science space is making games, so i't so much cooler playing games I've made!
+                One of my favorite parts of working in the computer science space is making games, so it's so much cooler playing games I've made!
                 This portfolio showcases some of the projects I've worked on and the games I made.
             </p>
         </section>
@@ -134,14 +135,14 @@
                     <p>
                         Very fun. Watch out or else kaboom.
                     </p>
-                    <p><strong>Technologies:</strong> x</p>
+                    <p><strong>Technologies:</strong> Java</p>
                     <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
                 </div>
 
                 <div class="project-card">
                     <h3>Lights Out</h3>
                     <p>
-                        THIS ONE ACTUALLY WORKS!               Some may say it's EXTREMEly fun (8/10 ball knowledge).
+                                      Some may say it's EXTREMEly fun (8/10 ball knowledge).
                     </p>
                     <p><strong>Technologies:</strong> Eclipse</p>
                     <a href="http://127.0.0.1:5500/LightsOutFolder/LightsOut.html" target="_blank">Link</a>
@@ -152,7 +153,7 @@
                     <p>
                        Sssssss
                     </p>
-                    <p><strong>Technologies:</strong> x</p>
+                    <p><strong>Technologies:</strong> Eclipse</p>
                     <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
                 </div>
             </div>
@@ -168,7 +169,7 @@
                     <p>
                         Watch out or else the aliens are going to invade your space...
                     </p>
-                    <p><strong>Technologies:</strong> x</p>
+                    <p><strong>Technologies:</strong> Eclipse</p>
                     <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
                 </div>
 
@@ -176,43 +177,57 @@
                     <h3>Pong (NYR VS NJD)</h3>
                     <p>
                         I couldn't decide if I was a Rangers fan or Devils fan, so why not make a game with both? I'm very proud of this game, because I feel like it's one of my best and most customized games I've ever made.
-                        Can you find the hidden easeter egg?  (Hint: My dad is a <strong>B</strong>ig <strong>B</strong>ruins fan, shout to him.)
+                        Can you find the hidden easter egg?  (Hint: My dad is a <strong>B</strong>ig <strong>B</strong>ruins fan, shout to him.)
                     </p>
-                    <p><strong>Technologies:</strong> x</p>
+                    <p><strong>Technologies:</strong> Eclipse</p>
                     <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
                 </div>
             </div>
         </section>
 
         ---
-              
-        <section id="ATCS-projects"
+        
+        <section id="ATCS-projects">
             <h2>ATCS projects</h2>
-            <div class="project-card">
+
+            <div class="projects-grid atcs-projects">
+                <div class="project-card">
                     <h3>Base conversion calculator</h3>
                     <p>
                         The numbers we use everyday are actually in base ten, since there are 10 digits before moving up to the next position(tens, hundreds, thousands, etc.). Computers use many different bases, commonly including base 2, binary, base 8, octal, and base 16, hexadecimal. This calculator will help you convert a number from and to any positive base up to base 36. Give it a try!
                     </p>
-                    <p><strong>Technologies:</strong> x</p>
+                    <p><strong>Technologies:</strong> Eclipse</p>
                     <a href="http://127.0.0.1:3000/BaseConverterFolder/BaseConverter.html?serverWindowId=399a60d0-04e9-4c12-a177-c8d591bca8f1" target="_blank">View on GitHub</a>
                 </div>
 
-            <div class="projects-grid atcs-projects">
+                <!-- Pong removed from ATCS section per user request -->
+
                 <div class="project-card">
+                    <h3>Arduino</h3>
+                    <p>
+                        Note: only use a remote for TVs, NOT here.
+                    </p>
+                    <p><strong>Technologies:</strong> Java</p>
+                    <video src="IMG_3249.mp4" width="100%" controls>
+        Your browser does not support the video tag.
+    </video>
+                </div>
+
+                <div class="project-card coming-soon">
                     <h3>COMING SOON: Immaculate Grid?!</h3>
                     <p>
                         Didn't make this yet, probably want to.
                     </p>
-                    <p><strong>Technologies:</strong> x</p>
+                    <p><strong>Technologies:</strong> Eclipse</p>
                     <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
                 </div>
 
-                <div class="project-card">
+                <div class="project-card coming-soon">
                     <h3>COMING SOON: Who knows...</h3>
                     <p>
                         Not even I know what's coming next...
                     </p>
-                    <p><strong>Technologies:</strong> x</p>
+                    <p><strong>Technologies:</strong> Eclipse</p>
                     <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
                 </div>
             </div>
@@ -228,7 +243,7 @@
             <ul>
                 <li><strong>Email:</strong> eepstein27@pascack.org</li>
                 <li><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/yourprofile" target="_blank">linkedin.com/in/yourprofile OOPS DON'T HAVE ONE</a></li>
-                <li><strong>GitHub:</strong> <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a></li>
+                <li><strong>GitHub:</strong> <a href="https://github.com/EvanEpstein" target="_blank">github.com/EvanEpstein</a></li>
             </ul>
         </section>
         
