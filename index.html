@@ -69,7 +69,6 @@
             box-sizing: border-box;
             margin-bottom: 20px;
         }
-        /* Only make "coming soon" ATCS cards dotted; keep real project cards solid */
         .atcs-projects .project-card.coming-soon {
             border-style: dotted;
         }
@@ -85,6 +84,98 @@
             bottom: 0;
             width: 100%;
         }
+
+        /* --- MODAL CSS --- */
+        .modal-trigger-link {
+            color: #007bff;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; 
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; 
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 900px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            font-family: Arial, sans-serif;
+        }
+        
+        .modal-content * {
+            font-family: Arial, sans-serif; 
+        }
+
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #333;
+        }
+
+        /* --- UPDATED VIDEO CONTAINER CSS --- */
+        /* This is no longer for an iframe, but for a <video> element */
+        /* #modal-video-container {
+            width: 100%;
+            margin-bottom: 1.5rem;
+        } */
+         #modal-video-container {
+            /* Set a max-width to control the size of the vertical video */
+            max-width: 400px; /* <--- YOU CAN CHANGE THIS VALUE */
+
+            /* This centers the container (and the video inside it) */
+            margin-left: auto;
+            margin-right: auto;
+
+            /* This keeps the space below the video */
+            margin-bottom: 1.5rem;
+        }
+
+        /* This makes your local video file responsive */
+        #modal-video-container video {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        /* --- END OF VIDEO CSS UPDATE --- */
+
+
+        #modal-code-container {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 8px;
+            max-height: 400px;
+            overflow-y: auto; 
+            font-family: "Courier New", monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
     </style>
 </head>
 <body>
@@ -200,19 +291,17 @@
                     <a href="http://127.0.0.1:3000/BaseConverterFolder/BaseConverter.html?serverWindowId=399a60d0-04e9-4c12-a177-c8d591bca8f1" target="_blank">View on GitHub</a>
                 </div>
 
-                <!-- Pong removed from ATCS section per user request -->
-
                 <div class="project-card">
                     <h3>Arduino</h3>
                     <p>
                         Note: only use a remote for TVs, NOT here.
                     </p>
-                    <p><strong>Technologies:</strong> Java</p>
-                    <video src="IMG_3249.mp4" width="100%" controls>
-        Your browser does not support the video tag.
-    </video>
+                    <p><strong>Technologies:</strong> Arduino IDE, Mr. Uhl's part-shop</p>
+                    <!-- Use the dedicated Arduino details page instead of the modal -->
+                    <!-- Replace Arduino.html with a different path if you prefer a different filename or folder -->
+                    <p><a href="Arduino.html" class="modal-trigger-link">link</a></p>
                 </div>
-
+                
                 <div class="project-card coming-soon">
                     <h3>COMING SOON: Immaculate Grid?!</h3>
                     <p>
@@ -249,9 +338,154 @@
         
     </div>
 
+    <div id="project-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modal-title">Project Title</h2>
+            <p id="modal-description">Project description...</p>
+            
+            <h3>Video Demonstration</h3>
+            <div id="modal-video-container">
+                </div>
+            
+            <h3>Arduino Code (.ino)</h3>
+            <pre><code id="modal-code-container">// Arduino code will be loaded here...</code></pre>
+        </div>
+    </div>
+
+
     <footer>
         <p>&copy; 2025 Evan Epstein. All rights reserved.</p>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- 1. UPDATED PROJECT DATA ---
+            // This now points to your local files.
+            // ** IMPORTANT: **
+            // - Replace "IMG_3249.mp4" with the EXACT filename of your video.
+            // - Replace "your_code.ino" with the EXACT filename of your code.
+            // - Both files MUST be in the same folder as this HTML file.
+            const projectData = {
+                "arduinoProject": {
+                    title: "IR Remote to binary LEDs + digit display",
+                    description: "This project involves an IR remote and reciever, a single digit 7-segment display, and 4 LEDs. Thanks to the code provided below, whenever a number button is pressed on the IR remote, that number will show up (in base 10) on the 7-segment display, and will also light up the corresponding LEDs to make the binary translation. If anyother button is pressed on the remote, the display and LEDs show '0'.(Note: I apoligize for taking the video vertically!)",
+                    
+                    // --- CHANGE THIS ---
+                    // Use the *filename* of your MP4
+                    videoFile: "IMG_3249.mp4", 
+                    
+                    // --- CHANGE THIS ---
+                    // Use the *filename* of your .ino code file
+                    codeFile: "Birthday_IRremote_Binary_LEDs.ino" 
+                }
+            };
+
+
+            // --- 2. MODAL ELEMENT REFERENCES ---
+            // (These are the same as before)
+            const modal = document.getElementById('project-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDescription = document.getElementById('modal-description');
+            const modalVideoContainer = document.getElementById('modal-video-container');
+            const modalCodeContainer = document.getElementById('modal-code-container');
+            const closeButton = document.querySelector('.close-button');
+            const arduinoLink = document.getElementById('open-arduino-modal');
+
+            // --- 3. UPDATED openModal FUNCTION ---
+            // This function is now more complex. It creates a <video> element
+            // and uses fetch() to load your code file.
+            function openModal(projectId) {
+                const project = projectData[projectId];
+                if (!project) return;
+
+                // --- Part A: Populate simple text ---
+                modalTitle.textContent = project.title;
+                modalDescription.textContent = project.description;
+                
+                // --- Part B: Create and add the video player ---
+                
+                // Clear any old video first
+                modalVideoContainer.innerHTML = ''; 
+                
+                // Create a new <video> element
+                const videoElement = document.createElement('video');
+                videoElement.setAttribute('src', project.videoFile); // Set the source to your MP4 file
+                videoElement.setAttribute('controls', 'true'); // Show player controls (play/pause, volume)
+                
+                // Add the new video element to its container
+                modalVideoContainer.appendChild(videoElement);
+
+                
+                // --- Part C: Fetch and load the .ino code file ---
+                
+                // Set a "loading" message while we fetch the file
+                modalCodeContainer.textContent = '// Loading code from ' + project.codeFile + '...';
+
+                // Use the fetch API to read your file
+                // This is why you MUST use a local server
+                fetch(project.codeFile)
+                    .then(response => {
+                        // Check if the file was found (HTTP 200 OK)
+                        if (!response.ok) {
+                            // If the file isn't found, throw an error to be caught below
+                            throw new Error('File not found: ' + project.codeFile);
+                        }
+                        // If found, return the content as plain text
+                        return response.text();
+                    })
+                    .then(text => {
+                        // Success! Put the file's text content into the code block
+                        modalCodeContainer.textContent = text;
+                    })
+                    .catch(error => {
+                        // If fetch fails (e.g., file not found, server not running)
+                        // show an error message in the code block.
+                        console.error('Error fetching code:', error);
+                        modalCodeContainer.textContent = 'Error: Could not load file.\n\n' +
+                            'Details: ' + error.message + '\n\n' +
+                            'Please make sure the file "' + project.codeFile + '" \n' +
+                            'is in the same folder as index.html \n' +
+                            'and that you are running a local server.';
+                    });
+
+                // --- Part D: Show the modal ---
+                modal.style.display = 'block';
+            }
+
+            // --- 4. UPDATED closeModal FUNCTION ---
+            // This now also needs to stop the local video.
+            function closeModal() {
+                modal.style.display = 'none';
+                
+                // Clear the video container to stop the video from playing
+                modalVideoContainer.innerHTML = '';
+                
+                // Clear the code container
+                modalCodeContainer.textContent = '';
+            }
+
+            // --- 5. EVENT LISTENERS ---
+            // (These are the same as before)
+
+            if (arduinoLink) {
+                arduinoLink.addEventListener('click', () => {
+                    openModal('arduinoProject');
+                });
+            }
+
+            if (closeButton) {
+                closeButton.addEventListener('click', closeModal);
+            }
+
+            window.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
