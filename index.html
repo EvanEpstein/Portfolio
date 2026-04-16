@@ -1,491 +1,1157 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATCS Evan Epstein - Computer Science Portfolio</title>
+    <title>Evan Epstein — CS Portfolio</title>
+
     <style>
-        * {
-        font-family: "Playfair Display", serif;
-        font-optical-sizing: auto;
-        font-style: normal;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-        header {
-            background-color: #53311f;
-            color: #fff;
-            padding: 1em 0;
-            text-align: center;
-        }
-        header h1 {
-            margin: 0;
-        }
-        nav ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            background-color: #444;
-        }
-        nav li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 20px;
-            text-decoration: none;
-        }
-        nav li a:hover {
-            background-color: #555;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-            overflow: hidden;
-            padding: 20px 0;
-        }
-        .projects-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 20px; 
-        }
-        .project-card {
-            background-color: #fff;
-            border: 4px solid #ff6303;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(224,110, 65,0.1);
-            width: calc(50% - 10px);
-            box-sizing: border-box;
-            margin-bottom: 20px;
-        }
-        .atcs-projects .project-card.coming-soon {
-            border-style: dotted;
-        }
-        .project-card h3 {
-            margin-top: 0;
-        }
-        footer {
-            text-align: center;
-            padding: 1em 0;
-            background-color: #333;
-            color: #fff;
-            position: relative;
-            bottom: 0;
-            width: 100%;
+        /* ============================================================
+           CSS VARIABLES — light & dark themes
+        ============================================================ */
+        :root {
+            --bg:          #f5f0e8;
+            --bg2:         #ede8df;
+            --card:        #ffffff;
+            --text:        #1a1208;
+            --text-muted:  #6b5f4e;
+            --accent:      #c94f00;
+            --accent2:     #53311f;
+            --gold:        #e6ac00;
+            --border:      #d4c9b8;
+            --nav-bg:      #1a1208;
+            --shadow:      rgba(26,18,8,0.10);
+            --shadow-lg:   rgba(26,18,8,0.22);
+            --grain:       url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
         }
 
-        /* --- MODAL CSS --- */
-        .modal-trigger-link {
-            color: #007bff;
-            text-decoration: underline;
-            cursor: pointer;
-            font-weight: bold;
+        [data-theme="dark"] {
+            --bg:          #0f0b07;
+            --bg2:         #1a1410;
+            --card:        #1e1812;
+            --text:        #f0e8d8;
+            --text-muted:  #a89880;
+            --accent:      #ff6b1a;
+            --accent2:     #d4956a;
+            --gold:        #f0c040;
+            --border:      #3a3028;
+            --nav-bg:      #080604;
+            --shadow:      rgba(0,0,0,0.40);
+            --shadow-lg:   rgba(0,0,0,0.60);
         }
+
+        /* ============================================================
+           RESET & BASE
+        ============================================================ */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 400;
+            line-height: 1.7;
+            transition: background-color 0.4s ease, color 0.4s ease;
+            cursor: none; /* We use a custom cursor */
+            overflow-x: hidden;
+        }
+
+        /* Grain overlay — subtle texture on top of everything */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: var(--grain);
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.6;
+        }
+
+        /* ============================================================
+           CUSTOM CURSOR
+           Two circles: a small dot that follows exactly,
+           and a larger ring that lags behind slightly.
+        ============================================================ */
+        #cursor-dot {
+            position: fixed;
+            width: 8px; height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: width 0.15s, height 0.15s, background 0.2s;
+        }
+        #cursor-ring {
+            position: fixed;
+            width: 32px; height: 32px;
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease, border-color 0.2s, transform 0.08s ease;
+            opacity: 0.6;
+        }
+        body:has(a:hover) #cursor-ring,
+        body:has(button:hover) #cursor-ring {
+            width: 52px; height: 52px;
+            opacity: 0.4;
+        }
+
+        /* ============================================================
+           TYPOGRAPHY
+        ============================================================ */
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            line-height: 1.15;
+            color: var(--text);
+        }
+
+        /* ============================================================
+           NAVIGATION
+        ============================================================ */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 500;
+            background: var(--nav-bg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            height: 56px;
+            box-shadow: 0 2px 20px var(--shadow-lg);
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .nav-logo span { color: var(--accent); }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2px;
+        }
+
+        nav ul li a {
+            display: block;
+            color: rgba(255,255,255,0.65);
+            text-decoration: none;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border-radius: 4px;
+            transition: color 0.2s, background 0.2s;
+        }
+
+        nav ul li a:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* Dark mode toggle in nav */
+        #theme-toggle {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            border-radius: 20px;
+            padding: 5px 14px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            cursor: none;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        #theme-toggle:hover { background: rgba(255,255,255,0.18); }
+
+        /* ============================================================
+           HERO SECTION
+        ============================================================ */
+        .hero {
+            min-height: 88vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px 8%;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--bg) 60%, var(--bg2) 100%);
+        }
+
+        /* Decorative large background text */
+        .hero::after {
+            content: 'CS';
+            position: absolute;
+            right: 5%;
+            bottom: -2%;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(180px, 25vw, 340px);
+            font-weight: 900;
+            color: var(--accent2);
+            opacity: 0.06;
+            line-height: 1;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .hero-tag {
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero-tag::before {
+            content: '';
+            display: block;
+            width: 36px;
+            height: 1px;
+            background: var(--accent);
+        }
+
+        .hero h1 {
+            font-size: clamp(3.2rem, 7vw, 6.5rem);
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            line-height: 1.0;
+            margin-bottom: 28px;
+            max-width: 900px;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .hero-sub {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            max-width: 540px;
+            margin-bottom: 48px;
+            line-height: 1.8;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.04em;
+            padding: 14px 30px;
+            border-radius: 4px;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .hero-cta:hover {
+            background: var(--accent2);
+            transform: translateY(-2px);
+        }
+        .hero-cta::after {
+            content: '↓';
+            font-size: 1.1rem;
+        }
+
+        /* Scroll-in animation */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============================================================
+           TICKER
+        ============================================================ */
+        .ticker-wrap {
+            background: var(--nav-bg);
+            overflow: hidden;
+            padding: 16px 0;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .ticker {
+            display: flex;
+            width: fit-content;
+            animation: ticker-scroll 35s linear infinite;
+        }
+
+        @keyframes ticker-scroll {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-50%); }
+        }
+
+        .ticker-item {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            width: 110px;
+            color: rgba(255,255,255,0.55);
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .ticker-item img {
+            width: 28px; height: 28px;
+            object-fit: contain;
+            filter: brightness(0) invert(0.7);
+            transition: filter 0.2s;
+        }
+        .ticker-item:hover img { filter: brightness(0) invert(1); }
+        .ticker-item:hover { color: rgba(255,255,255,0.9); }
+
+        /* ============================================================
+           SECTION LAYOUT
+        ============================================================ */
+        .container {
+            width: 88%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            gap: 20px;
+            margin-bottom: 48px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-header h2 {
+            font-size: clamp(1.8rem, 3vw, 2.6rem);
+            font-weight: 800;
+        }
+
+        .section-label {
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: rgba(201,79,0,0.1);
+            padding: 4px 10px;
+            border-radius: 3px;
+        }
+
+        /* ============================================================
+           PROJECT CARDS
+        ============================================================ */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        /* Featured card spans full width */
+        .project-card.hero-card {
+            grid-column: 1 / -1;
+        }
+
+        .project-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            box-shadow: 0 2px 12px var(--shadow);
+        }
+
+        /* Accent stripe on left edge */
+        .project-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 4px;
+            background: var(--accent);
+            border-radius: 12px 0 0 12px;
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover::before { transform: scaleY(1); }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 40px var(--shadow-lg);
+            border-color: var(--accent);
+        }
+
+        /* Dotted border for coming-soon */
+        .project-card.coming-soon {
+            border-style: dashed;
+            opacity: 0.7;
+        }
+        .project-card.coming-soon::before { display: none; }
+        .project-card.coming-soon:hover { opacity: 1; transform: translateY(-3px); }
+
+        .project-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .project-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            line-height: 1.7;
+        }
+
+        .tech-tag {
+            display: inline-block;
+            background: rgba(201,79,0,0.08);
+            color: var(--accent);
+            border: 1px solid rgba(201,79,0,0.2);
+            border-radius: 3px;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            padding: 3px 9px;
+            margin: 2px 2px 2px 0;
+        }
+
+        .card-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 18px;
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s, gap 0.2s;
+        }
+        .card-link:hover {
+            border-color: var(--accent);
+            gap: 10px;
+        }
+        .card-link::after { content: '→'; }
+
+        /* Star badge */
+        .star-badge {
+            display: none;
+            position: absolute;
+            top: 16px; right: 16px;
+            width: 20px; height: 20px;
+            filter: drop-shadow(0 1px 2px rgba(230,172,0,0.5));
+        }
+        .project-card.featured .star-badge { display: block; }
+
+        /* Coming soon badge */
+        .coming-badge {
+            display: inline-block;
+            background: var(--border);
+            color: var(--text-muted);
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 3px;
+            margin-bottom: 12px;
+        }
+
+        /* ============================================================
+           ABOUT SECTION — full-width editorial layout
+        ============================================================ */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 60px;
+            align-items: start;
+        }
+
+        .about-left h2 {
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            font-weight: 900;
+            line-height: 1.1;
+        }
+
+        .about-left h2 em {
+            display: block;
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .about-right p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 16px;
+            line-height: 1.85;
+        }
+
+        .about-stats {
+            display: flex;
+            gap: 32px;
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .stat-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        /* ============================================================
+           CONTACT SECTION
+        ============================================================ */
+        .contact-section {
+            background: var(--nav-bg);
+            color: #fff;
+            padding: 80px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .contact-section h2 {
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 900;
+            color: #fff;
+            max-width: 400px;
+            line-height: 1.1;
+        }
+
+        .contact-section h2 em {
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+        .contact-link:hover { color: #fff; }
+
+        .contact-link-icon {
+            width: 40px; height: 40px;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .contact-link:hover .contact-link-icon {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        /* ============================================================
+           FOOTER
+        ============================================================ */
+        footer {
+            background: var(--nav-bg);
+            border-top: 1px solid rgba(255,255,255,0.06);
+            text-align: center;
+            padding: 24px;
+            color: rgba(255,255,255,0.3);
+            font-size: 0.78rem;
+            letter-spacing: 0.05em;
+        }
+
+        /* ============================================================
+           MODAL
+        ============================================================ */
+        .modal-trigger-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 18px;
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s, gap 0.2s;
+            cursor: none;
+        }
+        .modal-trigger-link:hover {
+            border-color: var(--accent);
+            gap: 10px;
+        }
+        .modal-trigger-link::after { content: '→'; }
 
         .modal {
-            display: none; 
+            display: none;
             position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto; 
-            background-color: rgba(0, 0, 0, 0.6);
+            inset: 0;
+            z-index: 2000;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(6px);
+            overflow-y: auto;
         }
 
         .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto; 
-            padding: 30px;
-            border-radius: 10px;
-            max-width: 900px;
+            background: var(--card);
+            color: var(--text);
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 16px;
+            max-width: 860px;
             width: 90%;
             position: relative;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            font-family: Arial, sans-serif;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+            border: 1px solid var(--border);
         }
-        
-        .modal-content * {
-            font-family: Arial, sans-serif; 
+
+        .modal-content h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
         }
+
+        .modal-content p { color: var(--text-muted); margin-bottom: 24px; }
 
         .close-button {
-            color: #aaa;
             position: absolute;
-            top: 15px;
-            right: 25px;
-            font-size: 30px;
-            font-weight: bold;
-            cursor: pointer;
+            top: 16px; right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            color: var(--text-muted);
+            cursor: none;
+            line-height: 1;
+            transition: color 0.2s;
         }
-
-        .close-button:hover,
-        .close-button:focus {
-            color: #333;
-        }
-
-        /* --- UPDATED VIDEO CONTAINER CSS --- */
-        /* This is no longer for an iframe, but for a <video> element */
-        /* #modal-video-container {
-            width: 100%;
-            margin-bottom: 1.5rem;
-        } */
-         #modal-video-container {
-            /* Set a max-width to control the size of the vertical video */
-            max-width: 400px; /* <--- YOU CAN CHANGE THIS VALUE */
-
-            /* This centers the container (and the video inside it) */
-            margin-left: auto;
-            margin-right: auto;
-
-            /* This keeps the space below the video */
-            margin-bottom: 1.5rem;
-        }
-
-        /* This makes your local video file responsive */
-        #modal-video-container video {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-        }
-        /* --- END OF VIDEO CSS UPDATE --- */
-
+        .close-button:hover { color: var(--text); }
 
         #modal-code-container {
-            background-color: #2d2d2d;
-            color: #f8f8f2;
+            background: #0f0b07;
+            color: #f0e8d8;
             padding: 1.5rem;
-            border-radius: 8px;
-            max-height: 400px;
-            overflow-y: auto; 
-            font-family: "Courier New", monospace;
-            font-size: 0.9rem;
-            line-height: 1.5;
+            border-radius: 10px;
+            max-height: 380px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
             white-space: pre-wrap;
+            border: 1px solid rgba(255,255,255,0.08);
         }
+
+        /* ============================================================
+           DIVIDER
+        ============================================================ */
+        .section-divider {
+            width: 88%;
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* ============================================================
+           SCROLL ANIMATION SETUP
+        ============================================================ */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.65s ease, transform 0.65s ease;
+        }
+        .fade-up.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* Stagger children */
+        .stagger > * { transition-delay: calc(var(--i, 0) * 80ms); }
 
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Evan Epstein</h1>
-        <p>Computer Science Student | Aspiring Developer</p>
-    </header>
+    <!-- Custom cursor -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
 
+    <!-- ============================================================
+         NAVIGATION
+    ============================================================ -->
     <nav>
+        <a href="#hero" class="nav-logo">Evan <span>Epstein</span></a>
         <ul>
             <li><a href="#about">About</a></li>
-            <li><a href="#APCS-projects">APCS Projects</a></li>
-            <li><a href="#Honors-projects">Honors Projects</a></li>
-            <li><a href="#ATCS-projects">ATCS Projects</a></li>
+            <li><a href="#personal-projects">Personal</a></li>
+            <li><a href="#APCS-projects">APCS</a></li>
+            <li><a href="#Honors-projects">Honors</a></li>
+            <li><a href="#ATCS-projects">ATCS</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
+        <button id="theme-toggle">🌙 Dark</button>
     </nav>
 
-    <div class="container">
-        
-        <section id="about">
-            <h2>About Me</h2>
-            <p>
-                Hello! I am Evan Epstein, a computer science student with a passion for baseball, soccer, and video games. 
-                One of my favorite parts of working in the computer science space is making games, so it's so much cooler playing games I've made!
-                This portfolio showcases some of the projects I've worked on and the games I made.
-            </p>
-        </section>
+    <!-- ============================================================
+         HERO
+    ============================================================ -->
+    <section class="hero" id="hero">
+        <p class="hero-tag fade-up"></p>
+        <h1 class="fade-up" style="transition-delay:0.1s">
+            Evan's Computer Science Portfolio
+        </h1>
+        <p class="hero-sub fade-up" style="transition-delay:0.2s">
+            Hi, I'm Evan Epstein, a CS student from New Jersey with a passion
+            for Soccer, Baseball, and computer programming.
+            Three years of projects, one portfolio.
+        </p>
+        <a href="#personal-projects" class="hero-cta fade-up" style="transition-delay:0.3s">
+            See my work
+        </a>
+    </section>
 
-        ---
-
-        <section id="APCS-projects">
-            <h2>APCS projects</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <h3>Geometry Dash</h3>
-                    <p>
-                        Last year, I decided to have my final project be my own rendition of a game from my childhood, Geometry Dash.
-                        I think it went pretty well, and when I played it after I finished it, the level I made ran well, looked clean, and was fun.
-                    </p>
-                    <p><strong>Technologies:</strong> Eclipse, Mr. Uhl, Mr. Uhl's video guides, indomitable human spirit</p>
-                    <a href="https://github.com/yourusername/project1" target="_blank">Since admins don't like us</a>
-                </div>
-
-                <div class="project-card">
-                    <h3>Minesweeper</h3>
-                    <p>
-                        Very fun. Watch out or else kaboom.
-                    </p>
-                    <p><strong>Technologies:</strong> Java</p>
-                    <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
-                </div>
-
-                <div class="project-card">
-                    <h3>Lights Out</h3>
-                    <p>
-                                      Some may say it's EXTREMEly fun (8/10 ball knowledge).
-                    </p>
-                    <p><strong>Technologies:</strong> Eclipse</p>
-                    <a href="http://127.0.0.1:5500/LightsOutFolder/LightsOut.html" target="_blank">Link</a>
-                </div>
-                
-                <div class="project-card">
-                    <h3>Snake</h3>
-                    <p>
-                       Sssssss
-                    </p>
-                    <p><strong>Technologies:</strong> Eclipse</p>
-                    <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
-                </div>
-            </div>
-        </section>
-
-        ---
-        
-        <section id="Honors-projects">
-            <h2>Honors projects</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <h3>Space Invaders</h3>
-                    <p>
-                        Watch out or else the aliens are going to invade your space...
-                    </p>
-                    <p><strong>Technologies:</strong> Eclipse</p>
-                    <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
-                </div>
-
-                <div class="project-card">
-                    <h3>Pong (NYR VS NJD)</h3>
-                    <p>
-                        I couldn't decide if I was a Rangers fan or Devils fan, so why not make a game with both? I'm very proud of this game, because I feel like it's one of my best and most customized games I've ever made.
-                        Can you find the hidden easter egg?  (Hint: My dad is a <strong>B</strong>ig <strong>B</strong>ruins fan, shout to him.)
-                    </p>
-                    <p><strong>Technologies:</strong> Eclipse</p>
-                    <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
-                </div>
-            </div>
-        </section>
-
-        ---
-        
-        <section id="ATCS-projects">
-            <h2>ATCS projects</h2>
-
-            <div class="projects-grid atcs-projects">
-                <div class="project-card">
-                    <h3>Base conversion calculator</h3>
-                    <p>
-                        The numbers we use everyday are actually in base ten, since there are 10 digits before moving up to the next position(tens, hundreds, thousands, etc.). Computers use many different bases, commonly including base 2, binary, base 8, octal, and base 16, hexadecimal. This calculator will help you convert a number from and to any positive base up to base 36. Give it a try!
-                    </p>
-                    <p><strong>Technologies:</strong> Eclipse</p>
-                    <a href="http://127.0.0.1:3000/BaseConverterFolder/BaseConverter.html?serverWindowId=399a60d0-04e9-4c12-a177-c8d591bca8f1" target="_blank">View on GitHub</a>
-                </div>
-
-                <div class="project-card">
-                    <h3>Arduino</h3>
-                    <p>
-                        Note: only use a remote for TVs, NOT here.
-                    </p>
-                    <p><strong>Technologies:</strong> Arduino IDE, Mr. Uhl's part-shop</p>
-                    <!-- Use the dedicated Arduino details page instead of the modal -->
-                    <!-- Replace Arduino.html with a different path if you prefer a different filename or folder -->
-                    <p><a href="Arduino.html" class="modal-trigger-link">link</a></p>
-                </div>
-                
-                <div class="project-card coming-soon">
-                    <h3>COMING SOON: Immaculate Grid?!</h3>
-                    <p>
-                        Didn't make this yet, probably want to.
-                    </p>
-                    <p><strong>Technologies:</strong> Eclipse</p>
-                    <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
-                </div>
-
-                <div class="project-card coming-soon">
-                    <h3>COMING SOON: Who knows...</h3>
-                    <p>
-                        Not even I know what's coming next...
-                    </p>
-                    <p><strong>Technologies:</strong> Eclipse</p>
-                    <a href="https://github.com/yourusername/project2" target="_blank">View on GitHub</a>
-                </div>
-            </div>
-        </section>
-
-        ---
-
-        <section id="contact">
-            <h2>Contact Me</h2>
-            <p>
-                Feel free to reach out to me!
-            </p>
-            <ul>
-                <li><strong>Email:</strong> eepstein27@pascack.org</li>
-                <li><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/yourprofile" target="_blank">linkedin.com/in/yourprofile OOPS DON'T HAVE ONE</a></li>
-                <li><strong>GitHub:</strong> <a href="https://github.com/EvanEpstein" target="_blank">github.com/EvanEpstein</a></li>
-            </ul>
-        </section>
-        
+    <!-- ============================================================
+         TICKER
+    ============================================================ -->
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <div class="ticker-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="">Java</div>
+            <div class="ticker-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="">HTML</div>
+            <div class="ticker-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="">CSS</div>
+            <div class="ticker-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="">JS</div>
+            <div class="ticker-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/arduino/arduino-original.svg" alt="">Arduino</div>
+            <div class="ticker-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="">Python</div>
+            <div class="ticker-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="">Colab</div>
+            <div class="ticker-item">🔢<br>Binary</div>
+            <div class="ticker-item">🎨<br>Front-End</div>
+            <div class="ticker-item">⚙️<br>Back-End</div>
+            <div class="ticker-item">🛡️<br>Cyber</div>
+            <!-- duplicate for seamless loop -->
+            <div class="ticker-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="">Java</div>
+            <div class="ticker-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="">HTML</div>
+            <div class="ticker-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="">CSS</div>
+            <div class="ticker-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="">JS</div>
+            <div class="ticker-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/arduino/arduino-original.svg" alt="">Arduino</div>
+            <div class="ticker-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="">Python</div>
+            <div class="ticker-item"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="">Colab</div>
+            <div class="ticker-item">🔢<br>Binary</div>
+            <div class="ticker-item">🎨<br>Front-End</div>
+            <div class="ticker-item">⚙️<br>Back-End</div>
+            <div class="ticker-item">🛡️<br>Cyber</div>
+        </div>
     </div>
 
+    <!-- ============================================================
+         ABOUT
+    ============================================================ -->
+    <div class="container" id="about">
+        <div class="about-grid fade-up">
+            <div class="about-left">
+                <h2>About me<br><em></em></h2>
+            </div>
+            <div class="about-right">
+                <p>
+                    Hello! I'm Evan Epstein, a computer science student with a passion for baseball,
+                    soccer, and computer programming. Over the past three years I've taken every level
+                    of CS my school offers. I believe that coding helped to develop my problem solving and logical thinking
+                    better and the thought process I learned have been invaluable beyond just computers.
+                </p>
+                <p>
+                    I've worked on projects ranging from game clones to Arduino hardware hacks to
+                    teaching coding to elementary schoolers. This portfolio captures the ones I'm
+                    most proud of. Hope you enjoy exploring it as much as I enjoyed building it.
+                </p>
+                <div class="about-stats">
+                    <div class="stat">
+                        <span class="stat-num">3+</span>
+                        <span class="stat-label">Years of CS</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-num">10+</span>
+                        <span class="stat-label">Projects</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-num">11</span>
+                        <span class="stat-label">Technologies</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-num">∞</span>
+                        <span class="stat-label">Bugs fixed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ============================================================
+         PERSONAL PROJECTS
+    ============================================================ -->
+    <div class="container" id="personal-projects">
+        <div class="section-header fade-up">
+            <h2>Personal Projects</h2>
+            <span class="section-label">Self-initiated</span>
+        </div>
+        <div class="projects-grid stagger">
+            <div class="project-card featured hero-card fade-up" style="--i:0">
+                <svg class="star-badge" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="gold" stroke="#e6ac00" stroke-width="1"/>
+                </svg>
+                <h3>Coding for Kids</h3>
+                <p>A computer science class I designed and taught for 3rd–5th graders, covering CS fundamentals in a fun, accessible way using CodeMonkey. Ran for 4 weeks across 2 months.</p>
+                <div>
+                    <span class="tech-tag">CodeMonkey</span>
+                    <span class="tech-tag">Curriculum Design</span>
+                    <span class="tech-tag">Teaching</span>
+                </div>
+                <a href="CodingForKids.html" class="modal-trigger-link">See More</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ============================================================
+         APCS PROJECTS
+    ============================================================ -->
+    <div class="container" id="APCS-projects">
+        <div class="section-header fade-up">
+            <h2>APCS Projects</h2>
+            <span class="section-label">Year 2</span>
+        </div>
+        <div class="projects-grid stagger">
+
+            <div class="project-card featured fade-up" style="--i:0">
+                <svg class="star-badge" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="gold" stroke="#e6ac00" stroke-width="1"/>
+                </svg>
+                <h3>Geometry Dash</h3>
+                <p>My own rendition of a childhood classic. The level I built ran clean, looked polished, and was actually fun to play — but not many poeple can beat my level.</p>
+                <div>
+                    <span class="tech-tag">Java</span>
+                    <span class="tech-tag">Eclipse</span>
+                    <span class="tech-tag">Game Dev</span>
+                </div>
+                <a href="GeometryDash.html" class="modal-trigger-link">See More</a>
+            </div>
+
+            <div class="project-card fade-up" style="--i:1">
+                <h3>Minesweeper</h3>
+                <p>Very fun. Watch out or else kaboom.</p>
+                <div><span class="tech-tag">Java</span></div>
+                <a href="Minesweeper.html" target="Minesweeper.html" class="card-link">Launch</a>
+            </div>
+
+            <div class="project-card fade-up" style="--i:2">
+                <h3>Lights Out</h3>
+                <p>Some may say it's EXTREMEly fun (8/10 ball knowledge).</p>
+                <div><span class="tech-tag">Java</span><span class="tech-tag">Eclipse</span></div>
+                <a href="LightsOut.html" target="_blank" class="card-link">Launch</a>
+            </div>
+
+            <div class="project-card fade-up" style="--i:3">
+                <h3>Snake</h3>
+                <p>Sssssss</p>
+                <div><span class="tech-tag">Java</span><span class="tech-tag">Eclipse</span></div>
+                <a href="#" target="_blank" class="card-link">Launch</a>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ============================================================
+         HONORS PROJECTS
+    ============================================================ -->
+    <div class="container" id="Honors-projects">
+        <div class="section-header fade-up">
+            <h2>Honors Projects</h2>
+            <span class="section-label">Year 1</span>
+        </div>
+        <div class="projects-grid stagger">
+
+            <div class="project-card fade-up" style="--i:0">
+                <h3>Space Invaders</h3>
+                <p>Watch out or else the aliens are going to invade your space...</p>
+                <div><span class="tech-tag">Java</span><span class="tech-tag">Eclipse</span></div>
+                <a href="#" target="_blank" class="card-link">Launch</a>
+            </div>
+
+            <div class="project-card fade-up" style="--i:1">
+                <h3>Pong (NYR VS NJD)</h3>
+                <p>I couldn't decide if I was a Rangers or Devils fan, so I made a game with both. Can you find the hidden easter egg? (Hint: My dad is a <strong>B</strong>ig <strong>B</strong>ruins fan.)</p>
+                <div><span class="tech-tag">Java</span><span class="tech-tag">Eclipse</span></div>
+                <a href="#" target="_blank" class="card-link">Launch</a>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ============================================================
+         ATCS PROJECTS
+    ============================================================ -->
+    <div class="container" id="ATCS-projects">
+        <div class="section-header fade-up">
+            <h2>ATCS Projects</h2>
+            <span class="section-label">Year 3</span>
+        </div>
+        <div class="projects-grid stagger">
+
+            <div class="project-card fade-up" style="--i:0">
+                <h3>Base Conversion Calculator</h3>
+                <p>Computers use many different bases. This tool converts any number to any positive base up to base 36 — binary, octal, hex, and beyond.</p>
+                <div><span class="tech-tag">Java</span><span class="tech-tag">Eclipse</span></div>
+                <a href="BaseConverter.html" class="card-link">Launch</a>
+            </div>
+
+            <div class="project-card featured fade-up" style="--i:1">
+                <svg class="star-badge" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="gold" stroke="#e6ac00" stroke-width="1"/>
+                </svg>
+                <h3>Arduino</h3>
+                <p>IR remote + receiver + 7-segment display + 4 LEDs. Press a number, see it in decimal and binary simultaneously. Note: only use a remote for TVs, NOT here.</p>
+                <div><span class="tech-tag">Arduino IDE</span><span class="tech-tag">Hardware</span><span class="tech-tag">C++</span></div>
+                <a href="Arduino.html" class="modal-trigger-link">See More</a>
+            </div>
+
+            <div class="project-card featured fade-up" style="--i:2">
+                <svg class="star-badge" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="gold" stroke="#e6ac00" stroke-width="1"/>
+                </svg>
+                <h3>StrikeMaster</h3>
+                <p>StrikeMaster was my team's project to see who could make the best bowling-statistics calculator (spoiler we won)</p>
+                <div><span class="tech-tag">Canva</span><span class="tech-tag">VS Code</span></div>
+                <a href="StrikeMaster.html" target="_blank" class="modal-trigger-link">See More</a>
+            </div>
+
+            <div class="project-card featured fade-up" style="--i:3">
+                <svg class="star-badge" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="gold" stroke="#e6ac00" stroke-width="1"/>
+                </svg>
+                <h3>Cyber Security: CTF</h3>
+                <p>Capture the Flag challenges using PicoCTF and web shells. Learned the hard way that security is harder than it looks.</p>
+                <div><span class="tech-tag">PicoCTF</span><span class="tech-tag">Webshells</span><span class="tech-tag">Teamwork</span></div>
+                <a href="CyberSecurity.html" class="modal-trigger-link">See More</a>
+            </div>
+
+            <div class="project-card coming-soon fade-up" style="--i:4">
+                <span class="coming-badge">Coming Soon</span>
+                <h3>Immaculate Grid?!</h3>
+                <p>Didn't find the time to make this yet, I'd probably want to in the future.</p>
+                <div><span class="tech-tag">Eclipse</span></div>
+            </div>
+
+            <div class="project-card coming-soon fade-up" style="--i:5">
+                <span class="coming-badge">Coming Soon</span>
+                <h3>Who knows...</h3>
+                <p>Not even I know what's coming next...</p>
+                <div><span class="tech-tag">TBD</span></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ============================================================
+         CONTACT
+    ============================================================ -->
+    <section class="contact-section" id="contact">
+        <h2>Let's<br><em>connect.</em></h2>
+        <div class="contact-links">
+            <a href="mailto:eepstein27@pascack.org" class="contact-link">
+                <div class="contact-link-icon">✉️</div>
+                eepstein27@pascack.org
+            </a>
+            <a href="https://github.com/EvanEpstein" target="_blank" class="contact-link">
+                <div class="contact-link-icon">🐙</div>
+                github.com/EvanEpstein
+            </a>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         MODAL (Arduino)
+    ============================================================ -->
     <div id="project-modal" class="modal">
         <div class="modal-content">
-            <span class="close-button">&times;</span>
+            <button class="close-button">&times;</button>
             <h2 id="modal-title">Project Title</h2>
             <p id="modal-description">Project description...</p>
-            
-            <h3>Video Demonstration</h3>
-            <div id="modal-video-container">
-                </div>
-            
-            <h3>Arduino Code (.ino)</h3>
+            <h3 style="margin-bottom:12px; font-size:1rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--text-muted);">Arduino Code (.ino)</h3>
             <pre><code id="modal-code-container">// Arduino code will be loaded here...</code></pre>
         </div>
     </div>
 
-
+    <!-- ============================================================
+         FOOTER
+    ============================================================ -->
     <footer>
-        <p>&copy; 2025 Evan Epstein. All rights reserved.</p>
+        © 2025 Evan Epstein — Built with HTML, CSS & JavaScript
     </footer>
 
+    <!-- ============================================================
+         JAVASCRIPT
+    ============================================================ -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+    // --- CUSTOM CURSOR ---
+    const dot  = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    let ringX = 0, ringY = 0, dotX = 0, dotY = 0;
 
-            // --- 1. UPDATED PROJECT DATA ---
-            // This now points to your local files.
-            // ** IMPORTANT: **
-            // - Replace "IMG_3249.mp4" with the EXACT filename of your video.
-            // - Replace "your_code.ino" with the EXACT filename of your code.
-            // - Both files MUST be in the same folder as this HTML file.
-            const projectData = {
-                "arduinoProject": {
-                    title: "IR Remote to binary LEDs + digit display",
-                    description: "This project involves an IR remote and reciever, a single digit 7-segment display, and 4 LEDs. Thanks to the code provided below, whenever a number button is pressed on the IR remote, that number will show up (in base 10) on the 7-segment display, and will also light up the corresponding LEDs to make the binary translation. If anyother button is pressed on the remote, the display and LEDs show '0'.(Note: I apoligize for taking the video vertically!)",
-                    
-                    // --- CHANGE THIS ---
-                    // Use the *filename* of your MP4
-                    videoFile: "IMG_3249.mp4", 
-                    
-                    // --- CHANGE THIS ---
-                    // Use the *filename* of your .ino code file
-                    codeFile: "Birthday_IRremote_Binary_LEDs.ino" 
-                }
-            };
+    document.addEventListener('mousemove', e => {
+        dotX = e.clientX; dotY = e.clientY;
+        dot.style.left  = dotX + 'px';
+        dot.style.top   = dotY + 'px';
+    });
 
+    // Ring lags behind dot for a nice trailing effect
+    function animateRing() {
+        ringX += (dotX - ringX) * 0.12;
+        ringY += (dotY - ringY) * 0.12;
+        ring.style.left = ringX + 'px';
+        ring.style.top  = ringY + 'px';
+        requestAnimationFrame(animateRing);
+    }
+    animateRing();
 
-            // --- 2. MODAL ELEMENT REFERENCES ---
-            // (These are the same as before)
-            const modal = document.getElementById('project-modal');
-            const modalTitle = document.getElementById('modal-title');
-            const modalDescription = document.getElementById('modal-description');
-            const modalVideoContainer = document.getElementById('modal-video-container');
-            const modalCodeContainer = document.getElementById('modal-code-container');
-            const closeButton = document.querySelector('.close-button');
-            const arduinoLink = document.getElementById('open-arduino-modal');
+    // --- DARK MODE ---
+    const toggle = document.getElementById('theme-toggle');
+    const html   = document.documentElement;
 
-            // --- 3. UPDATED openModal FUNCTION ---
-            // This function is now more complex. It creates a <video> element
-            // and uses fetch() to load your code file.
-            function openModal(projectId) {
-                const project = projectData[projectId];
-                if (!project) return;
+    if (localStorage.getItem('theme') === 'dark') {
+        html.setAttribute('data-theme', 'dark');
+        toggle.textContent = '☀️ Light';
+    }
 
-                // --- Part A: Populate simple text ---
-                modalTitle.textContent = project.title;
-                modalDescription.textContent = project.description;
-                
-                // --- Part B: Create and add the video player ---
-                
-                // Clear any old video first
-                modalVideoContainer.innerHTML = ''; 
-                
-                // Create a new <video> element
-                const videoElement = document.createElement('video');
-                videoElement.setAttribute('src', project.videoFile); // Set the source to your MP4 file
-                videoElement.setAttribute('controls', 'true'); // Show player controls (play/pause, volume)
-                
-                // Add the new video element to its container
-                modalVideoContainer.appendChild(videoElement);
+    toggle.addEventListener('click', () => {
+        const isDark = html.getAttribute('data-theme') === 'dark';
+        html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+        toggle.textContent = isDark ? '🌙 Dark' : '☀️ Light';
+        localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    });
 
-                
-                // --- Part C: Fetch and load the .ino code file ---
-                
-                // Set a "loading" message while we fetch the file
-                modalCodeContainer.textContent = '// Loading code from ' + project.codeFile + '...';
-
-                // Use the fetch API to read your file
-                // This is why you MUST use a local server
-                fetch(project.codeFile)
-                    .then(response => {
-                        // Check if the file was found (HTTP 200 OK)
-                        if (!response.ok) {
-                            // If the file isn't found, throw an error to be caught below
-                            throw new Error('File not found: ' + project.codeFile);
-                        }
-                        // If found, return the content as plain text
-                        return response.text();
-                    })
-                    .then(text => {
-                        // Success! Put the file's text content into the code block
-                        modalCodeContainer.textContent = text;
-                    })
-                    .catch(error => {
-                        // If fetch fails (e.g., file not found, server not running)
-                        // show an error message in the code block.
-                        console.error('Error fetching code:', error);
-                        modalCodeContainer.textContent = 'Error: Could not load file.\n\n' +
-                            'Details: ' + error.message + '\n\n' +
-                            'Please make sure the file "' + project.codeFile + '" \n' +
-                            'is in the same folder as index.html \n' +
-                            'and that you are running a local server.';
-                    });
-
-                // --- Part D: Show the modal ---
-                modal.style.display = 'block';
+    // --- SCROLL FADE-IN ---
+    // Uses IntersectionObserver to trigger .fade-up animations
+    // as each element scrolls into view.
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                observer.unobserve(e.target);
             }
-
-            // --- 4. UPDATED closeModal FUNCTION ---
-            // This now also needs to stop the local video.
-            function closeModal() {
-                modal.style.display = 'none';
-                
-                // Clear the video container to stop the video from playing
-                modalVideoContainer.innerHTML = '';
-                
-                // Clear the code container
-                modalCodeContainer.textContent = '';
-            }
-
-            // --- 5. EVENT LISTENERS ---
-            // (These are the same as before)
-
-            if (arduinoLink) {
-                arduinoLink.addEventListener('click', () => {
-                    openModal('arduinoProject');
-                });
-            }
-
-            if (closeButton) {
-                closeButton.addEventListener('click', closeModal);
-            }
-
-            window.addEventListener('click', (event) => {
-                if (event.target === modal) {
-                    closeModal();
-                }
-            });
         });
+    }, { threshold: 0.12 });
+
+    // Trigger hero elements immediately
+    document.querySelectorAll('.hero .fade-up').forEach((el, i) => {
+        setTimeout(() => el.classList.add('visible'), i * 120 + 100);
+    });
+
+    // Observe everything else
+    document.querySelectorAll('.fade-up:not(.hero .fade-up)').forEach(el => observer.observe(el));
+
+    // --- MODAL ---
+    const projectData = {
+        arduinoProject: {
+            title: "IR Remote to binary LEDs + digit display",
+            description: "This project involves an IR remote and receiver, a single digit 7-segment display, and 4 LEDs. Whenever a number button is pressed on the IR remote, that number shows up on the 7-segment display and lights up corresponding binary LEDs.",
+            codeFile: "Birthday_IRremote_Binary_LEDs.ino"
+        }
+    };
+
+    const modal            = document.getElementById('project-modal');
+    const modalTitle       = document.getElementById('modal-title');
+    const modalDescription = document.getElementById('modal-description');
+    const modalCode        = document.getElementById('modal-code-container');
+    const closeBtn         = document.querySelector('.close-button');
+
+    function openModal(id) {
+        const p = projectData[id];
+        if (!p) return;
+        modalTitle.textContent       = p.title;
+        modalDescription.textContent = p.description;
+        modalCode.textContent = '// Loading...';
+        fetch(p.codeFile)
+            .then(r => r.ok ? r.text() : Promise.reject('Not found'))
+            .then(t => { modalCode.textContent = t; })
+            .catch(() => { modalCode.textContent = '// Could not load file. Make sure you are running a local server.'; });
+        modal.style.display = 'block';
+    }
+
+    function closeModal() {
+        modal.style.display = 'none';
+        modalCode.textContent = '';
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    window.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+
+    // Wire up arduino link if it exists
+    const arduinoLink = document.getElementById('open-arduino-modal');
+    if (arduinoLink) arduinoLink.addEventListener('click', () => openModal('arduinoProject'));
     </script>
 
 </body>
 </html>
+
