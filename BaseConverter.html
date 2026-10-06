@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Base Converter</title>
+    <link rel="stylesheet" href="BaseConverter.css">
+</head>
+<body>
+
+    <div class="converter-container">
+        <header>
+            <h1>Evan's Epic Base converter</h1>
+        </header>
+
+        <div class="input-group">
+            <div class="input-field">
+                <label for="input-number">Number to Convert</label>
+                <input type="text" id="input-number" placeholder="Enter a number..." autocomplete="off">
+            </div>
+            <div class="input-field">
+                <label for="from-base">From Base</label>
+                <input type="number" id="from-base" value="10" min="2" max="36">
+            </div>
+        </div>
+        
+        <div id="error-message"></div>
+
+        <div class="output-section">
+            <h2>Standard Conversions</h2>
+            <div class="output-row">
+                <span class="base-label">Binary (Base 2)</span>
+                <span class="output-value" id="output-binary">...</span>
+            </div>
+            <div class="output-row">
+                <span class="base-label">Octal (Base 8)</span>
+                <span class="output-value" id="output-octal">...</span>
+            </div>
+            <div class="output-row">
+                <span class="base-label">Hexadecimal (Base 16)</span>
+                <span class="output-value" id="output-hex">...</span>
+            </div>
+        </div>
+
+        <div class="output-section custom-section">
+            <h2>Custom Conversion</h2>
+            <div class="input-field">
+                <label for="to-base">Convert to Base</label>
+                <input type="number" id="to-base" value="2" min="2" max="36">
+            </div>
+            <div class="output-row">
+                <span class="base-label" id="custom-base-label">Result (Base 2)</span>
+                <span class="output-value" id="output-custom">...</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="BaseConverter.js"></script>
+</body>
+</html>
